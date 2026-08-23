@@ -2,15 +2,12 @@ name: Build Android APK
 
 on:
   workflow_dispatch:
-  push:
-    tags:
-      - "v*"
 
 jobs:
   build-apk:
     name: Build APK
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 60
 
     steps:
       - name: Checkout code
@@ -37,6 +34,11 @@ jobs:
           packages: |
             platforms;android-35
             build-tools;35.0.0
+
+      - name: Create dummy env file
+        run: |
+          echo "EXPO_PUBLIC_SUPABASE_URL=https://placeholder.supabase.co" > .env
+          echo "EXPO_PUBLIC_SUPABASE_ANON_KEY=placeholder" >> .env
 
       - name: Prebuild native Android project
         run: npx expo prebuild --platform android --no-install
