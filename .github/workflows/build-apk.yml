@@ -35,7 +35,7 @@ jobs:
             platforms;android-35
             build-tools;35.0.0
 
-      - name: Create dummy env file
+      - name: Create placeholder env file
         run: |
           echo "EXPO_PUBLIC_SUPABASE_URL=https://placeholder.supabase.co" > .env
           echo "EXPO_PUBLIC_SUPABASE_ANON_KEY=placeholder" >> .env
@@ -43,26 +43,13 @@ jobs:
       - name: Prebuild native Android project
         run: npx expo prebuild --platform android --no-install
 
-      - name: Generate debug keystore
-        run: |
-          keytool -genkeypair -v \
-            -storetype PKCS12 \
-            -keystore android/app/debug.keystore \
-            -storepass android \
-            -alias androiddebugkey \
-            -keypass android \
-            -keyalg RSA \
-            -keysize 2048 \
-            -validity 10000 \
-            -dname "CN=Android Debug,O=Android,C=US"
-
-      - name: Build APK
+      - name: Build debug APK
         working-directory: android
-        run: ./gradlew assembleRelease --no-daemon -x lint
+        run: ./gradlew assembleDebug --no-daemon -x lint
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
           name: chromegpt-apk
-          path: android/app/build/outputs/apk/release/*.apk
+          path: android/app/build/outputs/apk/debug/*.apk
           retention-days: 30
