@@ -11,6 +11,9 @@
     "ios": {
       "supportsTablet": true
     },
+    "android": {
+      "package": "com.curumatipulan.aicodingassistant"
+    },
     "web": {
       "bundler": "metro",
       "output": "single",
